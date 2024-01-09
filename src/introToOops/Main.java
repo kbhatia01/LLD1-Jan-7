@@ -13,7 +13,7 @@ public class Main {
 
         Students s2 = new Students(s1);
 
-        System.out.println(s1.hashCode() +"-"+ s2.hashCode());
+        System.out.println(s1.name == s2.name);
 
 //        s1.age = 30;
 //        s1.batchName = "abc";
