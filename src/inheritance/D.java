@@ -1,6 +1,6 @@
 package inheritance;
 
-public class D extends C{
+public class D extends C implements Running{
     D(){
         super("My parent is C");
         System.out.println("D");
@@ -14,6 +14,9 @@ public class D extends C{
 //    String doSomething(){
 //        System.out.println("Class D's do something");
 //    }
+    public void run(){
+        System.out.println("Running");
 
+    }
 
 }
