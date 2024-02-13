@@ -10,7 +10,10 @@ public class main {
         student s2 = s.copy();
         student s3 = s.copy();
 
-        student is = new InStudent();
+        InStudent is = new InStudent();
+        is.name="abc";
+        is.psp=10;
+        is.batch="mno";
         student is1 = is.copy();
 
         System.out.println("debug");
