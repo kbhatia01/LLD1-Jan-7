@@ -10,7 +10,6 @@ public class Main {
         b =  new Milk(b);
         b = new Whip(b);
 
-        Beverage b = new Milk();
 
 //        Beverage b2 = new Espresso();
 //        b2 = new Whip(b2);
