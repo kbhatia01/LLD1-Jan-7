@@ -10,9 +10,12 @@ import TicTacToe.stratergy.winningStratergy.WinningStratergy;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws InvalidBotCount {
+
+        Scanner sc = new Scanner(System.in);
         GameController gc = new GameController();
 
         try {
@@ -20,7 +23,7 @@ public class Main {
 
             List<Player> p = new ArrayList<>();
             p.add(new Player(1, "Karan", PlayerType.HUMAN, new Symbol('X')));
-            p.add(new Bot(1, "Karan", new Symbol('X'), BotDificulty.EASY));
+            p.add(new Bot(1, "Bot", new Symbol('O'), BotDificulty.EASY));
 
             List<WinningStratergy> ws = List.of(
                     new ColWinningStratergy(),
@@ -34,6 +37,13 @@ public class Main {
 
             while (g.getGameState().equals(GameState.INPROGRESS)) {
                 gc.makeMove(g);
+                System.out.println("Want to undo press 1");
+                int undoAnswer  = sc.nextInt();
+                if(undoAnswer == 1){
+                    System.out.println("undoing..");
+                    gc.undo(g);
+                }
+
                 gc.displayBoard(g);
             }
 

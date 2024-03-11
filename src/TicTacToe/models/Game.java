@@ -137,6 +137,23 @@ public class Game {
         return false;
     }
 
+    public void undo(){
+        if(moves.isEmpty()){
+            System.out.println("No moves left...");
+            return;
+        }
+        Move m = moves.get(moves.size()-1);
+        moves.removeLast();
+        Cell c = board.getBoard().get(m.getCell().getRow()).get(m.getCell().getCol());
+        c.setPlayer(null);
+        c.setCellState(CellState.EMPTY);
+        nextPlayerTurn -=1;
+        nextPlayerTurn = (nextPlayerTurn+players.size()) %players.size();
+        for(WinningStratergy ws : winningStratergies){
+            ws.handleUndo(m, board);
+        }
+    }
+
     public static Builder getInstanceBuilder(){
         return new Builder();
     }
@@ -157,6 +174,7 @@ public class Game {
             return this;
         }
 
+
         public int getDimension() {
             return dimension;
         }
@@ -174,6 +192,8 @@ public class Game {
             this.winningStratergies = winningStratergies;
             return this;
         }
+
+
         public void validate() throws InvalidBotCount{
             int botCount = 0;
             for(Player p: players){

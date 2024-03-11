@@ -40,9 +40,9 @@ public class Cell {
 
     public void display(){
         if(player==null){
-            System.out.println("| - |");
+            System.out.print("| - |");
         } else {
-            System.out.println("| " + player.getSymbol().getSymbol() + " |");
+            System.out.print("| " + player.getSymbol().getSymbol() + " |");
 
         }
     }
