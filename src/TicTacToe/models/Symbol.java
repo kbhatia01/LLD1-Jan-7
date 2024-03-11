@@ -3,6 +3,9 @@ package TicTacToe.models;
 public class Symbol {
     private char symbol;
 
+    public Symbol(char c){
+        this.symbol = c;
+    }
     public char getSymbol() {
         return symbol;
     }

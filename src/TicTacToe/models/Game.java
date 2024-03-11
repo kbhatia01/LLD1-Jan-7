@@ -1,8 +1,7 @@
 package TicTacToe.models;
 
 import TicTacToe.Exception.InvalidBotCount;
-import TicTacToe.winningStratergy.WinningStratergy;
-import inheritance.B;
+import TicTacToe.stratergy.winningStratergy.WinningStratergy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,6 +81,60 @@ public class Game {
 
     public void setGameState(GameState gameState) {
         this.gameState = gameState;
+    }
+
+    public boolean validate(Move m){
+        int row = m.getCell().getRow();
+        int col = m.getCell().getCol();
+
+        if (row>board.getSize()){
+            return false;
+        }
+        if (col>board.getSize()){
+            return false;
+        }
+        return board.getBoard().get(row).get(col).getCellState().equals(CellState.EMPTY);
+    }
+    public void makeMove(){
+        Player currentPlayer = players.get(nextPlayerTurn);
+        System.out.println("Current turn is " + currentPlayer.getName());
+        Move m = currentPlayer.makeMove(board);
+
+        if(!validate(m)){
+            System.out.println("invalid move!!");
+            return;
+        }
+        int row = m.getCell().getRow();
+        int col = m.getCell().getCol();
+        Cell cellToUpdate = board.getBoard().get(row).get(col);
+        cellToUpdate.setCellState(CellState.FILLED);
+        cellToUpdate.setPlayer(currentPlayer);
+
+        Move finalMove = new Move(cellToUpdate, currentPlayer);
+
+        moves.add(finalMove);
+
+        nextPlayerTurn +=1;
+        nextPlayerTurn %= players.size();
+
+        if(checkWinner(board, finalMove)){
+            gameState = GameState.SUCCESS;
+            winner = currentPlayer;
+        } else if(moves.size() == board.getSize()*board.getSize()){
+            gameState = GameState.DRAW;
+        }
+
+        System.out.println("Player" + currentPlayer.getName() + " moved at "+ row + " , "+ col);
+
+    }
+
+    public boolean checkWinner(Board b, Move m){
+        for (WinningStratergy w:winningStratergies){
+            if(w.checkWinner(m, b)){
+                return true;
+            }
+        }
+        return false;
     }
 
     public static Builder getInstanceBuilder(){

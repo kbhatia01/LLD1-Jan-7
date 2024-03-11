@@ -4,8 +4,7 @@ import TicTacToe.Exception.InvalidBotCount;
 import TicTacToe.models.Game;
 import TicTacToe.models.GameState;
 import TicTacToe.models.Player;
-import TicTacToe.models.PlayerType;
-import TicTacToe.winningStratergy.WinningStratergy;
+import TicTacToe.stratergy.winningStratergy.WinningStratergy;
 
 import java.util.List;
 
@@ -30,7 +29,7 @@ public class GameController {
     }
 
     public void makeMove(Game game){
-//        TODO: IMPLEMENT..
+        game.makeMove();
     }
 
     public GameState checkState(Game g){

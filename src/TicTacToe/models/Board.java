@@ -1,5 +1,6 @@
 package TicTacToe.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Board {
@@ -10,6 +11,13 @@ public class Board {
 
     public Board(int d){
         this.size = d;
+        board = new ArrayList<>();
+        for(int i=0;i<d;i++){
+            board.add(new ArrayList<>());
+            for (int j = 0; j < d; j++) {
+                board.get(i).add(new Cell(i,j));
+            }
+        }
     }
     public List<List<Cell>> getBoard() {
         return board;
@@ -30,6 +38,11 @@ public class Board {
     }
 
     public void printBoard(){
-        // TODO: Implement..
+       for(List<Cell> row: board){
+           for(Cell cell: row){
+               cell.display();
+           }
+           System.out.println();
+       }
     }
 }
