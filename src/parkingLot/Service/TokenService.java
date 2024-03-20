@@ -14,10 +14,10 @@ public class TokenService {
     private ParkingSlotRepo parkingSlotRepo;
     private TokenRepo tokenRepo;
 
-    TokenService(GateRepo gateRepo, VehicleRepo vehicleRepo,
-                 ParkingLotRepo parkingLotRepo,
-                 ParkingSlotRepo parkingSlotRepo,
-    TokenRepo tokenRepo){
+    public TokenService(GateRepo gateRepo, VehicleRepo vehicleRepo,
+                        ParkingLotRepo parkingLotRepo,
+                        ParkingSlotRepo parkingSlotRepo,
+                        TokenRepo tokenRepo){
         this.gateRepo = gateRepo;
         this.vehicleRepo = vehicleRepo;
         this.parkingLotRepo = parkingLotRepo;
@@ -61,6 +61,8 @@ public class TokenService {
 
 
         Token finalToken = tokenRepo.SaveToken(t);
+
+        finalToken.setNumber("Token--" + finalToken.getId());
 
 
         // 3. return token

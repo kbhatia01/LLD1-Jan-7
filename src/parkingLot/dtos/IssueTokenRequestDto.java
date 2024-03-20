@@ -8,7 +8,7 @@ public class IssueTokenRequestDto {
 
     String OwnerName;
 
-    long GateId;
+    int GateId;
 
     VehicleType vehicleType;
 
@@ -28,11 +28,11 @@ public class IssueTokenRequestDto {
         OwnerName = ownerName;
     }
 
-    public long getGateId() {
+    public int getGateId() {
         return GateId;
     }
 
-    public void setGateId(long gateId) {
+    public void setGateId(int gateId) {
         GateId = gateId;
     }
 

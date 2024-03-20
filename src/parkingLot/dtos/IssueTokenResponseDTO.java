@@ -8,6 +8,26 @@ public class IssueTokenResponseDTO {
 
     Token token;
 
+    private ResponseStatus responseStatus;
+
+    private String failureMsg;
+
+    public String getFailureMsg() {
+        return failureMsg;
+    }
+
+    public void setFailureMsg(String failureMsg) {
+        this.failureMsg = failureMsg;
+    }
+
+    public ResponseStatus getResponseStatus() {
+        return responseStatus;
+    }
+
+    public void setResponseStatus(ResponseStatus responseStatus) {
+        this.responseStatus = responseStatus;
+    }
+
     public Token getToken() {
         return token;
     }

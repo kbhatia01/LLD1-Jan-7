@@ -4,6 +4,8 @@ public class Gate extends BaseModel{
     int GateNumber;
     GateType gateType;
 
+//    ParkingLot p;
+
     Operator operator;
 
     GateStatus gateStatus;
