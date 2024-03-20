@@ -13,6 +13,16 @@ public class ParkingLot extends BaseModel{
 
     private ParkingLotStatus status;
 
+    public SlotAssignmentStratergyEnum getParkingLotStratergy() {
+        return parkingLotStratergy;
+    }
+
+    public void setParkingLotStratergy(SlotAssignmentStratergyEnum parkingLotStratergy) {
+        this.parkingLotStratergy = parkingLotStratergy;
+    }
+
+    private SlotAssignmentStratergyEnum parkingLotStratergy;
+
     public List<parkingFloor> getParkingFloors() {
         return parkingFloors;
     }
