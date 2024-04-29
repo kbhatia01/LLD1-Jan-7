@@ -1,51 +1,45 @@
-package parkingLot.controller;
+package Controller;
 
-import parkingLot.Model.Token;
-import parkingLot.Model.Vehicle;
-import parkingLot.Service.TokenService;
-import parkingLot.dtos.IssueTokenRequestDto;
-import parkingLot.dtos.IssueTokenResponseDTO;
-import parkingLot.dtos.ResponseStatus;
+import DTO.IssueTokenRequestDto;
+import DTO.IssueTokenResponseDto;
+import DTO.ResponseStatus;
+import Models.Token;
+import Service.TokenService;
 
 public class TokenController {
 
-    TokenService ts;
-
-    public TokenController(TokenService ts){
-        this.ts = ts;
+    TokenService tokenService;
+    public TokenController(TokenService tokenService){
+        this.tokenService = tokenService;
     }
-    public IssueTokenResponseDTO issueToken(IssueTokenRequestDto requestDto){
-        IssueTokenResponseDTO response  =  new IssueTokenResponseDTO();
+    public IssueTokenResponseDto requestToken(IssueTokenRequestDto issueTokenRequestDto){
+        //1. interact with client
+        // 2, validate inputs
+        //3. call token service to issue token
+        // 4. set these token setails to responseDTo and send it back to user.
+        IssueTokenResponseDto issueTokenResponseDto = new IssueTokenResponseDto();
 
         try {
-            Token token = ts.issueToken(requestDto.getVehicleNumber(),
-                    requestDto.getOwnerName(),
-                    requestDto.getGateId(),
-                    requestDto.getVehicleType()
-            );
-            response.setToken(token);
-            response.setResponseStatus(ResponseStatus.SUCCESS);
-        } catch (Exception e){
-            response.setResponseStatus(ResponseStatus.FAILURE);
-            response.setFailureMsg("SOMETHING WENT WRONG!!");
 
+            Token t = tokenService.issueToken(issueTokenRequestDto.getVehicalNumber(),
+                    issueTokenRequestDto.getVehicleOwner(),
+                    issueTokenRequestDto.getGateNo(),
+                    issueTokenRequestDto.getVehicleType());
+
+
+            issueTokenResponseDto.setToken(t);
+            issueTokenResponseDto.setVehicalNumber(issueTokenRequestDto.getVehicalNumber());
+            issueTokenResponseDto.setGateNo(issueTokenRequestDto.getGateNo());
+            issueTokenResponseDto.setVehicleOwner(issueTokenRequestDto.getVehicleOwner());
+            issueTokenResponseDto.setVehicleType(issueTokenRequestDto.getVehicleType());
+            issueTokenResponseDto.setResponseStatus(ResponseStatus.SUCCESS);
+            issueTokenResponseDto.setMessage("Token successfullt generated");
+        }
+        catch (Exception e){
+            issueTokenResponseDto.setResponseStatus(ResponseStatus.FAILED);
+            issueTokenResponseDto.setMessage("Something went wrong. Cannot issue Token \n" + e.getMessage());
         }
 
-        return response;
+        return issueTokenResponseDto;
     }
-
-// 1. need to interact with client
-//     2.      when request comes, validate
-//    3. call the actual services for business logic
-//    4. recieve the data and create response for client accordingly...
-
-//classController{
-//        DTO: authentication toke
-//                classData
-
-//     AuthencationService(dto)? 1-> AuthencationService(dto.authToken)
-//    AttendClassService(Dto)? -> AttendClassService(dto.classData)
-
-//}
-
 }

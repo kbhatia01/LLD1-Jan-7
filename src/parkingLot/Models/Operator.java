@@ -1,9 +1,8 @@
-package parkingLot.Model;
+package Models;
 
-public class Operator extends BaseModel{
-
-    String name;
-    String emp_id;
+public class Operator extends Base_Model{
+    private String name;
+    private String emp_id;
 
     public String getName() {
         return name;

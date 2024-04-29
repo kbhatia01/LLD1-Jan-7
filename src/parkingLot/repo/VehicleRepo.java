@@ -1,30 +1,28 @@
-package parkingLot.repo;
+package Repo;
 
-import parkingLot.Model.Gate;
-import parkingLot.Model.Vehicle;
+import Models.Vehicle;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
 
 public class VehicleRepo {
+    int vehicleId =0;
+    Map<String,Vehicle> vehicles = new TreeMap<>();
+    public  Optional<Vehicle> findVehicleByNumber(String vehicleNumber){
 
-    private Map<String, Vehicle> vehicles = new TreeMap<>();
-
-    private int PreviousID = 0;
-    public Optional<Vehicle> findByVehicleNumber(String vehicleNumber){
-
-        if(vehicles.containsKey(vehicleNumber)){
+        if(vehicles.containsKey(vehicleNumber))
             return Optional.of(vehicles.get(vehicleNumber));
-        }
         return Optional.empty();
     }
 
-    public Vehicle saveVehicle(Vehicle v){
-        int newId = this.PreviousID+1;
-        v.setId(newId);
-        vehicles.put(v.getVehicleName(),v);
-        this.PreviousID +=1;
-        return v;
+    public  Vehicle saveVehicle(Vehicle V){
+        V.setId(vehicleId);
+        vehicles.put(V.getVehicleRegNum(),V);
+        vehicleId++;
+        return V;
     }
+
+
 }

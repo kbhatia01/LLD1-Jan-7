@@ -1,8 +1,9 @@
-package parkingLot.Service;
+package Service;
 
-import parkingLot.Model.*;
-import parkingLot.Stratergy.getSlotStartergyFactory;
-import parkingLot.repo.*;
+import Models.*;
+import Repo.*;
+import Strategy.SlotAssignmentStrategy;
+import Strategy.slotStrategyFactory;
 
 import java.util.Date;
 import java.util.Optional;
@@ -11,62 +12,60 @@ public class TokenService {
     private GateRepo gateRepo;
     private VehicleRepo vehicleRepo;
     private ParkingLotRepo parkingLotRepo;
-    private ParkingSlotRepo parkingSlotRepo;
+    private SlotRepo slotRepo;
     private TokenRepo tokenRepo;
 
-    public TokenService(GateRepo gateRepo, VehicleRepo vehicleRepo,
-                        ParkingLotRepo parkingLotRepo,
-                        ParkingSlotRepo parkingSlotRepo,
-                        TokenRepo tokenRepo){
+    public TokenService(GateRepo gateRepo,VehicleRepo vehicleRepo,ParkingLotRepo parkingLotRepo,
+                            SlotRepo slotRepo,TokenRepo tokenRepo){
         this.gateRepo = gateRepo;
-        this.vehicleRepo = vehicleRepo;
-        this.parkingLotRepo = parkingLotRepo;
-        this.parkingSlotRepo = parkingSlotRepo;
+        this.vehicleRepo= vehicleRepo;
+        this.parkingLotRepo=parkingLotRepo;
+        this.slotRepo = slotRepo;
         this.tokenRepo = tokenRepo;
     }
-    public Token issueToken(String VehicleNumber,
+    public Token issueToken(String vehicleNumber,
                             String vehicleOwnerName,
                             int gateId,
-                            VehicleType vehicleType){
-        // 1. create a token object
+                            VEHICLE_TYPE vehicleType) throws Exception{
+
+        //1 create token
+
         Token t = new Token();
         t.setEntryTime(new Date());
         Gate g = gateRepo.findGateById(gateId);
-        t.setGenratedGate(g);
-        t.setGenratedBy(g.getOperator());
+        if(g.getParkingLot().getCapacity()<0){
+            throw new Exception("Parking Lot Filled");
+        }
+        t.setGeneratedBy(g.getOperator());
+        t.setGeneratedGate(g);
+        Optional<Vehicle> vehicleOptional = vehicleRepo.findVehicleByNumber(vehicleNumber);
         Vehicle v;
-        Optional<Vehicle> vOptional= vehicleRepo.findByVehicleNumber(VehicleNumber);
-        if(vOptional.isEmpty()){
+        if(vehicleOptional.isEmpty()){
             Vehicle newVehicle = new Vehicle();
-            newVehicle.setVehicleName(VehicleNumber);
             newVehicle.setVehicleType(vehicleType);
+            newVehicle.setVehicleRegNum(vehicleNumber);
             newVehicle.setOwnerName(vehicleOwnerName);
             v = vehicleRepo.saveVehicle(newVehicle);
-        } else {
-            v= vOptional.get();
         }
-
+        else {
+            v = vehicleOptional.get();
+        }
         t.setVehicle(v);
+        //2 assign slot and change status
+        Parking_Lot p = parkingLotRepo.findParkinglotByGateid(g);
+        SlotAllocationStrategy s = p.getSlotAllocationStrategy();
+        SlotAssignmentStrategy sa = slotStrategyFactory.getSlotStrategy(s);
+        Parking_Slot pl = sa.getSlot(vehicleType,g);
+        t.setParkingSlot(pl);
+        // updating slot status
+                slotRepo.updateSlotStatusBYId(pl,PARKING_SLOT_STATUS.FILLED);
+         // updating parking lot capacity
+                parkingLotRepo.updateCapacity(p);
+            t = tokenRepo.sveToken(t);
+            t.setNumber("Token -- "+t.getId());
 
+            //3 return token
 
-
-        // 2. assign a slot and change slot status..
-
-        SlotAssignmentStratergyEnum  startergyVal= parkingLotRepo.getByGateId(g).getParkingLotStratergy();
-
-        ParkingSlots parkingSlots = getSlotStartergyFactory.getSlotStratergyBasedOnType(startergyVal).getSlot(vehicleType, g);
-
-        t.setParkingSlots(parkingSlots);
-        parkingSlotRepo.UpdateSlotById(parkingSlots, ParkingSLotStatus.FILLED);
-
-
-        Token finalToken = tokenRepo.SaveToken(t);
-
-        finalToken.setNumber("Token--" + finalToken.getId());
-
-
-        // 3. return token
-
-        return finalToken;
+                return t;
     }
 }
